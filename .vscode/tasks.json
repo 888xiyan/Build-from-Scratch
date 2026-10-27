@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "C: Build ThreadPool",
+      "type": "shell",
+      "command": "gcc",
+      "args": [
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror=implicit-function-declaration",
+        "-D_POSIX_C_SOURCE=200809L",
+        "-g3",
+        "-O0",
+        "-I${workspaceFolder}/ThreadPool",
+        "${workspaceFolder}/ThreadPool/task.c",
+        "${workspaceFolder}/ThreadPool/threadpool.c",
+        "${workspaceFolder}/ThreadPool/worker.c",
+        "${workspaceFolder}/ThreadPool/main.c",
+        "-pthread",
+        "-o",
+        "${workspaceFolder}/ThreadPool/threadpool_test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "detail": "使用 GCC 编译并链接 ThreadPool 模块"
+    },
+    {
+      "label": "C: Run ThreadPool",
+      "type": "process",
+      "command": "${workspaceFolder}/ThreadPool/threadpool_test",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "C: Build ThreadPool"
+      ],
+      "problemMatcher": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "detail": "编译并运行线程池示例"
+    },
+    {
+      "label": "C: Clean ThreadPool",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-f",
+        "${workspaceFolder}/ThreadPool/threadpool_test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      },
+      "detail": "删除 ThreadPool 编译产物"
+    }
+  ]
+}

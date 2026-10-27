@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C: Debug ThreadPool",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/ThreadPool/threadpool_test",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "C: Build ThreadPool",
+      "setupCommands": [
+        {
+          "description": "启用 GDB 整体美化输出",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+# Build outputs
+/build/
+*.o
+*.a
+*.so
+*.so.*
+*.out
+*.exe
+*.d
+ThreadPool/threadpool_test
+
+# Debugging and crash dumps
+*.dSYM/
+core
+core.*
+vgcore.*
+
+# Coverage and profiling
+*.gcda
+*.gcno
+*.gcov
+coverage/
+.profraw
+*.profdata
+
+# Tooling caches
+.cache/
+compile_commands.json
+
+# Editor and OS state
+.vscode/*
+!.vscode/c_cpp_properties.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*~
