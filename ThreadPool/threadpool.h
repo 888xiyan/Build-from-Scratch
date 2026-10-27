@@ -14,6 +14,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "list.h" // 通用单链表（DataStructure/list.h）：任务队列直接复用它，
+                  // 线程池不再手写 head/tail/next 的拼接和清理逻辑。
+
 // pthread.h 是 POSIX 线程库的头文件，声明了创建和管理线程所需的类型和函数。在线程池里，常用到这些：
 // - pthread_t：线程标识，用来保存线程。
 // - pthread_create()：创建线程，让它开始执行指定函数。
@@ -28,10 +31,11 @@ typedef void (*task_fn)(void *);
 // task_fn 是要执行的函数。void (*)(void *) 表示它接收一个 void * 参数，不返回结果。
 
 typedef struct task {
-    task_fn function;  // function 是要执行的函数。
-    void *arg;         // 传给函数的数据。用 void * 是为了让任务能携带不同类型的数据。
-                       // 约定：arg 的内存由任务函数自己负责释放（见 main.c 的 print_number）。
-    struct task *next; // 把任务连成链表，多个任务排起来就是等待执行的队列。
+    task_fn function; // function 是要执行的函数。
+    void *arg;        // 传给函数的数据。用 void * 是为了让任务能携带不同类型的数据。
+                      // 约定：arg 的内存由任务函数自己负责释放（见 main.c 的 print_number）。
+    /* 不再需要 next 字段：任务的先后顺序由通用链表 list_t 维护，
+     * task_t 只描述"一个任务是什么"，不关心"下一个任务是谁"。 */
 } task_t;
 
 /* ======================= 线程池 ======================= */
@@ -40,8 +44,9 @@ typedef struct threadpool {
     pthread_t *threads;       // 线程池中的所有工作线程。
     size_t thread_count;      // 线程池中工作线程的数量。
 
-    task_t *head;             // 任务队列的头节点（出队端）。
-    task_t *tail;             // 任务队列的尾节点（入队端）。
+    list_t *queue; // 任务队列：复用通用单链表，FIFO（尾插头出，O(1)）。
+                   // 注意：链表本身不加锁，任何访问 queue 的代码都必须持有 mutex。
+                   // 队列中元素是 task_t *，销毁时由 task_free 释放结构体（见 threadpool.c）。
 
     pthread_mutex_t mutex;    // 用于保护任务队列的互斥锁。
     pthread_cond_t condition; // 用于通知工作线程"有新任务 / 要停止"。

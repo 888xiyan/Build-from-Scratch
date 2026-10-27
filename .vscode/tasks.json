@@ -2,6 +2,25 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "C: Mkdir Build Dirs",
+      "type": "shell",
+      "command": "mkdir",
+      "args": [
+        "-p",
+        "${workspaceFolder}/ThreadPool/build",
+        "${workspaceFolder}/DataStructure/build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      },
+      "detail": "创建编译产物目录（已被 gitignore，干净克隆后也能直接构建）"
+    },
+    {
       "label": "C: Build ThreadPool",
       "type": "shell",
       "command": "gcc",
@@ -15,17 +34,23 @@
         "-g3",
         "-O0",
         "-I${workspaceFolder}/ThreadPool",
+        "-I${workspaceFolder}/DataStructure",
+        "${workspaceFolder}/DataStructure/list.c",
         "${workspaceFolder}/ThreadPool/task.c",
         "${workspaceFolder}/ThreadPool/threadpool.c",
         "${workspaceFolder}/ThreadPool/worker.c",
         "${workspaceFolder}/ThreadPool/main.c",
         "-pthread",
         "-o",
-        "${workspaceFolder}/ThreadPool/threadpool_test"
+        "${workspaceFolder}/ThreadPool/build/threadpool_test"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "C: Mkdir Build Dirs"
+      ],
       "problemMatcher": [
         "$gcc"
       ],
@@ -38,12 +63,12 @@
         "panel": "shared",
         "clear": true
       },
-      "detail": "使用 GCC 编译并链接 ThreadPool 模块"
+      "detail": "使用 GCC 编译并链接 通用链表(DataStructure) + ThreadPool 模块"
     },
     {
       "label": "C: Run ThreadPool",
       "type": "process",
-      "command": "${workspaceFolder}/ThreadPool/threadpool_test",
+      "command": "${workspaceFolder}/ThreadPool/build/threadpool_test",
       "dependsOrder": "sequence",
       "dependsOn": [
         "C: Build ThreadPool"
@@ -58,12 +83,66 @@
       "detail": "编译并运行线程池示例"
     },
     {
-      "label": "C: Clean ThreadPool",
+      "label": "C: Build ListTest",
+      "type": "shell",
+      "command": "gcc",
+      "args": [
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror=implicit-function-declaration",
+        "-g3",
+        "-O0",
+        "-I${workspaceFolder}/DataStructure",
+        "${workspaceFolder}/DataStructure/list.c",
+        "${workspaceFolder}/DataStructure/list_test.c",
+        "-o",
+        "${workspaceFolder}/DataStructure/build/list_test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "C: Mkdir Build Dirs"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "detail": "使用 GCC 编译通用链表自测程序（纯 C11，不依赖 pthread）"
+    },
+    {
+      "label": "C: Run ListTest",
+      "type": "process",
+      "command": "${workspaceFolder}/DataStructure/build/list_test",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "C: Build ListTest"
+      ],
+      "problemMatcher": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "detail": "编译并运行通用链表自测"
+    },
+    {
+      "label": "C: Clean",
       "type": "shell",
       "command": "rm",
       "args": [
         "-f",
-        "${workspaceFolder}/ThreadPool/threadpool_test"
+        "${workspaceFolder}/ThreadPool/build/threadpool_test",
+        "${workspaceFolder}/DataStructure/build/list_test"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -74,7 +153,7 @@
         "reveal": "silent",
         "panel": "shared"
       },
-      "detail": "删除 ThreadPool 编译产物"
+      "detail": "删除所有编译产物"
     }
   ]
 }

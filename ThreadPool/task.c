@@ -15,8 +15,8 @@
 
 //     task_t task = {
 //         .function = print_number,
-//         .arg = &number,
-//         .next = NULL
+//         .arg = &number
+//         // 不再需要 .next：任务之间的链接由通用链表 list_t 维护
 //     };
 
 //     // 工作线程取出任务后，执行这一句：

@@ -187,14 +187,21 @@
 ```text
 .
 ├── README.md
+├── DataStructure/
+│   ├── list.h              # 通用单链表的公共接口（void * 泛型 + 回调）
+│   ├── list.c              # 链表实现
+│   ├── list_test.c         # 链表自测与用法示例
+│   └── build/
+│       └── list_test       # 编译产物（已 gitignore）
 └── ThreadPool/
     ├── ThreadPool.md       # 设计笔记
-    ├── threadpool.h        # 公共接口与数据结构
+    ├── threadpool.h        # 公共接口与数据结构（任务队列复用 DataStructure/list.h）
     ├── threadpool.c        # 创建、提交、销毁等生命周期
     ├── worker.c            # 工作线程
-    ├── task.c              # 任务队列操作
+    ├── task.c              # 早期任务示例（已注释）
     ├── main.c              # 示例
-    └── threadpool_test     # 测试程序
+    └── build/
+        └── threadpool_test # 编译产物（已 gitignore）
 ```
 
 当前实验：

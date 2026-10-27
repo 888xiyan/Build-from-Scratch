@@ -5,7 +5,7 @@
       "name": "C: Debug ThreadPool",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/ThreadPool/threadpool_test",
+      "program": "${workspaceFolder}/ThreadPool/build/threadpool_test",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,

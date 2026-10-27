@@ -7,7 +7,8 @@
 *.out
 *.exe
 *.d
-ThreadPool/threadpool_test
+ThreadPool/build/threadpool_test
+DataStructure/build/list_test
 
 # Debugging and crash dumps
 *.dSYM/
